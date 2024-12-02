@@ -1,0 +1,291 @@
+version: 2
+
+sources:
+  - name: nba_project
+    description: "Datos en bruto del conjunto de datos NBA de Kaggle, que incluyen estadísticas de jugadores, equipos y juegos."
+    database: ALUMNO6_DEV_BRONZE_DB
+    schema: KAGGLE_RAW
+    tables:
+      - name: common_player_info
+        description: "Información general sobre los jugadores de la NBA, incluidos detalles personales y del equipo."
+        columns:
+          - name: person_id
+            description: "Identificador único para el jugador."
+            tests:
+              - relationships:
+                  field: id
+                  to: source('kaggle_raw', 'player')
+          - name: first_name
+            description: "Nombre del jugador."
+          - name: last_name
+            description: "Apellido del jugador."
+          - name: display_first_last
+            description: "Nombre del jugador en formato 'Nombre Apellido'."
+          - name: display_last_comma_first
+            description: "Nombre del jugador en formato 'Apellido, Nombre'."
+          - name: display_fi_last
+            description: "Nombre del jugador en formato 'N. Apellido'."
+          - name: player_slug
+            description: "Identificador único del jugador en formato slug."
+          - name: birthdate
+            description: "Fecha de nacimiento del jugador."
+          - name: school
+            description: "Escuela o universidad asistida por el jugador."
+          - name: country
+            description: "País de origen del jugador."
+          - name: last_affiliation
+            description: "Última afiliación del jugador antes de unirse a la NBA."
+          - name: height
+            description: "Altura del jugador como cadena."
+          - name: weight
+            description: "Peso del jugador en libras."
+          - name: season_exp
+            description: "Número de temporadas que ha jugado el jugador."
+          - name: jersey
+            description: "Número de camiseta del jugador."
+          - name: position
+            description: "Posición del jugador en la cancha."
+          - name: rosterstatus
+            description: "Estado del jugador en la plantilla del equipo."
+          - name: games_played_current_season_flag
+            description: "Indica si el jugador ha jugado en la temporada actual."
+          - name: team_id
+            description: "Identificador único del equipo del jugador."
+          - name: team_name
+            description: "Nombre del equipo del jugador."
+          - name: team_abbreviation
+            description: "Abreviatura del equipo del jugador."
+          - name: team_code
+            description: "Código del equipo del jugador."
+          - name: team_city
+            description: "Ciudad del equipo del jugador."
+          - name: playercode
+            description: "Código único asociado al jugador."
+          - name: from_year
+            description: "Año en que el jugador comenzó su carrera profesional."
+          - name: to_year
+            description: "Año en que el jugador terminó su carrera profesional."
+          - name: dleague_flag
+            description: "Indica si el jugador ha jugado en la D-League."
+          - name: nba_flag
+            description: "Indica si el jugador ha jugado en la NBA."
+          - name: games_played_flag
+            description: "Indica si el jugador ha participado en algún juego."
+          - name: draft_year
+            description: "Año en que el jugador fue seleccionado en el draft."
+          - name: draft_round
+            description: "Ronda en la que el jugador fue seleccionado en el draft."
+          - name: draft_number
+            description: "Número general de selección en el draft."
+          - name: greatest_75_flag
+            description: "Indica si el jugador forma parte de la lista de los 75 mejores jugadores de la NBA."
+      - name: player
+        description: "Información sobre los jugadores de la NBA, incluidos sus nombres y estado de actividad."
+        columns:
+          - name: id
+            description: "Identificador único para el jugador"
+            tests:
+              - unique
+              - not_null
+          - name: full_name
+            description: "Nombre completo del jugador."
+          - name: first_name
+            description: "Nombre del jugador."
+          - name: last_name
+            description: "Apellido del jugador."
+          - name: is_active
+            description: "Indica si el jugador está actualmente activo en la liga."
+      - name: draft_history
+        description: "Contiene detalles sobre el historial del draft de la NBA, incluidos detalles de selección de jugadores y equipos asociados."
+        columns:
+          - name: person_id
+            description: "Identificador único para el jugador en el sistema."
+            tests:
+              - relationships:
+                  field: id
+                  to: source('kaggle_raw', 'player')
+          - name: player_name
+            description: "Nombre completo del jugador seleccionado en el draft."
+          - name: season
+            description: "La temporada durante la cual ocurrió el draft."
+          - name: round_number
+            description: "La ronda del draft en la que se seleccionó al jugador."
+          - name: round_pick
+            description: "El número de selección dentro de la ronda específica del draft."
+          - name: overall_pick
+            description: "El número total de selección en el draft, considerando todas las rondas."
+          - name: draft_type
+            description: "Tipo de draft."
+          - name: team_id
+            description: "ID del equipo que seleccionó al jugador en el draft."
+          - name: team_city
+            description: "Ciudad del equipo que seleccionó al jugador."
+          - name: team_name
+            description: "Nombre completo del equipo que seleccionó al jugador."
+          - name: team_abbreviation
+            description: "Abreviatura del equipo que seleccionó al jugador."
+          - name: organization
+            description: "Organización asociada con la selección del draft (por ejemplo, equipo de la NCAA o club internacional)."
+          - name: organization_type
+            description: "Tipo de organización asociada con el jugador (por ejemplo, universidad, internacional)."
+          - name: player_profile_flag
+            description: "Indicador que muestra si existe un perfil detallado del jugador en el sistema (1 para sí, 0 para no)."
+      - name: game
+        description: "Tabla que contiene información sobre los juegos de la NBA con estadísticas de equipos locales y visitantes."
+        columns:
+          - name: game_id
+            description: "Identificador único para cada juego de la temporada."
+            tests:
+              - not_null
+              - relationships:
+                  field: game_id
+                  to: source('kaggle_raw', 'game_info')
+          - name: game_date
+            description: "Fecha y hora en que se jugó el partido."
+          - name: season_type
+            description: "Tipo de temporada (Regular Season, Playoffs, Preseason)."
+          - name: team_id_home
+            description: "Identificador único del equipo local."
+            tests:
+              - not_null
+          - name: team_abbreviation_home
+            description: "Abreviatura del equipo local."
+            tests:
+              - not_null
+          - name: team_name_home
+            description: "Nombre completo del equipo local."
+            tests:
+              - not_null
+          - name: wl_home
+            description: "Resultado para el equipo local: W o L ."
+            tests:
+              - accepted_values:
+                  values: ["W", "L"]
+          - name: min
+            description: "Minutos totales jugados en el partido."
+            tests:
+              - not_null
+          - name: fgm_home
+            description: "Tiros de campo anotados por el equipo local."
+          - name: fg_pct_home
+            description: "Porcentaje de tiros de campo del equipo local."
+          - name: team_id_away
+            description: "Identificador único del equipo visitante."
+            tests:
+              - not_null
+          - name: team_abbreviation_away
+            description: "Abreviatura del equipo visitante."
+            tests:
+              - not_null
+          - name: wl_away
+            description: "Resultado para el equipo visitante: W o L."
+            tests:
+              - accepted_values:
+                  values: ["W", "L"]
+          - name: pts_home
+            description: "Puntos totales anotados por el equipo local."
+          - name: pts_away
+            description: "Puntos totales anotados por el equipo visitante."
+          - name: plus_minus_home
+            description: "Plus/Minus del equipo local, una estadística que mide el impacto en el marcador mientras el equipo está en la cancha."
+          - name: plus_minus_away
+            description: "Plus/Minus del equipo visitante."
+      - name: game_info
+        description: "Tabla que contiene información detallada sobre los juegos de la NBA, incluidos identificadores, asistencia y tiempo."
+        columns:
+          - name: game_id
+            description: "Identificador único para cada juego de la temporada."
+            tests:
+              - not_null
+          - name: game_date
+            description: "Fecha y hora del juego en formato TIMESTAMP."
+          - name: attendance
+            description: "Número de asistentes presentes en el juego, registrado como un valor numérico."
+          - name: game_time
+            description: "Duración o hora de inicio del juego, almacenada como una cadena."
+      - name: other_stats
+        description: "Estadísticas adicionales de los partidos de la NBA, con detalles sobre puntos, rebotes y pérdidas de balón para equipos locales y visitantes."
+        columns:
+          - name: game_id
+            description: "Identificador único del juego."
+          - name: league_id
+            description: "Identificador único de la liga."
+          - name: team_id_home
+            description: "Identificador único del equipo local."
+          - name: team_abbreviation_home
+            description: "Abreviatura del equipo local."
+          - name: team_city_home
+            description: "Ciudad del equipo local."
+          - name: pts_paint_home
+            description: "Puntos anotados en la pintura por el equipo local."
+          - name: pts_2nd_chance_home
+            description: "Puntos de segunda oportunidad anotados por el equipo local."
+          - name: pts_fb_home
+            description: "Puntos en contraataque anotados por el equipo local."
+          - name: largest_lead_home
+            description: "Mayor ventaja obtenida por el equipo local durante el partido."
+          - name: lead_changes
+            description: "Número de cambios de liderato en el marcador durante el partido."
+          - name: times_tied
+            description: "Cantidad de veces que el marcador estuvo empatado."
+          - name: team_turnovers_home
+            description: "Pérdidas de balón del equipo local causadas por la defensa del equipo contrario."
+          - name: total_turnovers_home
+            description: "Pérdidas de balón totales del equipo local."
+          - name: team_rebounds_home
+            description: "Rebotes totales del equipo local."
+          - name: pts_off_to_home
+            description: "Puntos anotados tras pérdidas de balón del equipo contrario por parte del equipo local."
+          - name: team_id_away
+            description: "Identificador único del equipo visitante."
+          - name: team_abbreviation_away
+            description: "Abreviatura del equipo visitante."
+          - name: team_city_away
+            description: "Ciudad del equipo visitante."
+          - name: pts_paint_away
+            description: "Puntos anotados en la pintura por el equipo visitante."
+          - name: pts_2nd_chance_away
+            description: "Puntos de segunda oportunidad anotados por el equipo visitante."
+          - name: pts_fb_away
+            description: "Puntos en contraataque anotados por el equipo visitante."
+          - name: largest_lead_away
+            description: "Mayor ventaja obtenida por el equipo visitante durante el partido."
+          - name: team_turnovers_away
+            description: "Pérdidas de balón del equipo visitante causadas por la defensa del equipo contrario."
+          - name: total_turnovers_away
+            description: "Pérdidas de balón totales del equipo visitante."
+          - name: team_rebounds_away
+            description: "Rebotes totales del equipo visitante."
+          - name: pts_off_to_away
+            description: "Puntos anotados tras pérdidas de balón del equipo contrario por parte del equipo visitante."
+      - name: game_summary
+        description: "Resumen de los partidos de la NBA, con detalles sobre la fecha, equipos, estado del juego y transmisión en vivo."
+        columns:
+          - name: game_date_est
+            description: "Fecha y hora estimada del juego en formato TIMESTAMP."
+          - name: game_sequence
+            description: "Secuencia numérica del juego dentro de la temporada."
+          - name: game_id
+            description: "Identificador único del juego."
+          - name: game_status_id
+            description: "Identificador del estado del juego."
+          - name: game_status_text
+            description: "Descripción del estado del juego."
+          - name: gamecode
+            description: "Código único asignado al juego."
+          - name: home_team_id
+            description: "Identificador único del equipo local."
+          - name: visitor_team_id
+            description: "Identificador único del equipo visitante."
+          - name: season
+            description: "Temporada en la que se juega el partido."
+          - name: live_period
+            description: "Periodo actual del juego en vivo."
+          - name: live_pc_time
+            description: "Tiempo restante en el periodo actual del juego en vivo."
+          - name: natl_tv_broadcaster_abbreviation
+            description: "Abreviatura de la emisora de televisión nacional que transmite el juego."
+          - name: live_period_time_bcast
+            description: "Tiempo del periodo actual transmitido en vivo."
+          - name: wh_status
+            description: "Estado del juego (por ejemplo, 1 para activo, 0 para inactivo)."
