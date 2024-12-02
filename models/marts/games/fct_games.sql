@@ -8,15 +8,10 @@
 
 WITH scores as (
     select
-    {{ dbt_utils.star(from=ref('stg_game_scores'), prefix='score_') }}
+    {{ dbt_utils.star(from=ref('stg_game_scores')) }}
     from {{ ref('stg_game_scores') }}
 ),
 
-stats as (
-    select
-    {{ dbt_utils.star(from=ref('stg_game_stats'), except=['GAME_DATE_EST'], prefix='stats_') }}
-    from {{ ref('stg_game_stats') }}
-),
 
 games as (
     select
@@ -26,12 +21,9 @@ games as (
 
 
 select
-    {{ dbt_utils.star(from=ref('stg_games')) }},
-    {{ dbt_utils.star(from=ref('stats'), except=['STATS_GAME_ID', 'STATS_TEAM_ID_HOME', 'STATS_TEAM_ID_AWAY', 'STATS_TEAM_ABBREVIATION_HOME', 'STATS_TEAM_ABBREVIATION_AWAY']) }}
-    {{ dbt_utils.star(from=ref('scores'), except=['SCORE_GAME_ID', 'SCORE_GAME_DATE_EST', 'SCORE_TEAM_ID_HOME', 'SCORE_TEAM_ID_AWAY', 'SCORE_PTS_HOME', 'SCORE_PTS_AWAY', 'SCORE_SEASON']) }}
+    {{ dbt_utils.star(from=ref('stg_games'), relation_alias='g') }},
+    {{ dbt_utils.star(from=ref('stg_game_scores'), except=['SCORE_ID', 'GAME_ID','TEAM_ID_HOME', 'TEAM_ID_AWAY', 'EQUIPO_ABREV_LOC', 'EQUIPO_ABREV_VIS', 'PTS_LOC', 'PTS_VIS', 'GAME_DATE_EST' ], prefix='SCORE_', relation_alias='sc') }},
 from games g
-LEFT JOIN stats st
-ON g.GAME_ID = st.GAME_ID
 LEFT JOIN scores sc
-on g.GAME_ID = sc.GAME_ID
+ON g.GAME_ID = sc.GAME_ID
 
