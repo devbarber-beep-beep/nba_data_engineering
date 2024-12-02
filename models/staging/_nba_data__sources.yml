@@ -267,6 +267,8 @@ sources:
             description: "Secuencia numérica del juego dentro de la temporada."
           - name: game_id
             description: "Identificador único del juego."
+            tests:
+              - not_null
           - name: game_status_id
             description: "Identificador del estado del juego."
           - name: game_status_text
@@ -288,4 +290,268 @@ sources:
           - name: live_period_time_bcast
             description: "Tiempo del periodo actual transmitido en vivo."
           - name: wh_status
-            description: "Estado del juego (por ejemplo, 1 para activo, 0 para inactivo)."
+            description: "Estado del juego."
+      - name: line_score
+        description: "Desglose detallado de las puntuaciones para equipos locales y visitantes en cada juego, incluyendo puntos por cuartos y tiempos extras."
+        columns:
+          - name: game_date_est
+            description: "Fecha y hora estimadas del juego."
+          - name: game_sequence
+            description: "Número de secuencia del juego en la temporada."
+          - name: game_id
+            description: "Identificador único del juego."
+            tests:
+              - not_null
+          - name: team_id_home
+            description: "Identificador del equipo local."
+            tests:
+              - not_null
+          - name: team_abbreviation_home
+            description: "Abreviatura del equipo local."
+          - name: team_city_name_home
+            description: "Ciudad del equipo local."
+          - name: team_nickname_home
+            description: "Apodo del equipo local."
+          - name: team_wins_losses_home
+            description: "Registro de victorias y derrotas del equipo local."
+          - name: pts_qtr1_home
+            description: "Puntos anotados por el equipo local en el primer cuarto."
+          - name: pts_qtr2_home
+            description: "Puntos anotados por el equipo local en el segundo cuarto."
+          - name: pts_qtr3_home
+            description: "Puntos anotados por el equipo local en el tercer cuarto."
+          - name: pts_qtr4_home
+            description: "Puntos anotados por el equipo local en el cuarto cuarto."
+          - name: pts_home
+            description: "Puntos totales anotados por el equipo local."
+          - name: team_id_away
+            description: "Identificador del equipo visitante."
+            tests:
+              - not_null
+          - name: team_abbreviation_away
+            description: "Abreviatura del equipo visitante."
+          - name: team_city_name_away
+            description: "Ciudad del equipo visitante."
+          - name: team_nickname_away
+            description: "Apodo del equipo visitante."
+          - name: team_wins_losses_away
+            description: "Registro de victorias y derrotas del equipo visitante."
+          - name: pts_qtr1_away
+            description: "Puntos anotados por el equipo visitante en el primer cuarto."
+          - name: pts_qtr2_away
+            description: "Puntos anotados por el equipo visitante en el segundo cuarto."
+          - name: pts_qtr3_away
+            description: "Puntos anotados por el equipo visitante en el tercer cuarto."
+          - name: pts_qtr4_away
+            description: "Puntos anotados por el equipo visitante en el cuarto cuarto."
+          - name: pts_away
+            description: "Puntos totales anotados por el equipo visitante."
+      - name: team
+        description: "Tabla que contiene información básica de los equipos de la NBA, incluyendo nombre completo, abreviatura y ubicación."
+        columns:
+          - name: id
+            description: "Identificador único del equipo."
+            tests:
+              - unique
+              - not_null
+          - name: full_name
+            description: "Nombre completo del equipo."
+          - name: abbreviation
+            description: "Abreviatura del equipo."
+          - name: nickname
+            description: "Apodo del equipo."
+          - name: city
+            description: "Ciudad donde está ubicado el equipo."
+          - name: state
+            description: "Estado o provincia donde está ubicado el equipo."
+          - name: year_founded
+            description: "Año en que se fundó el equipo."
+      - name: team_details
+        description: "Tabla que contiene información detallada sobre los equipos, incluyendo su ubicación, arena, capacidad, y redes sociales."
+        columns:
+          - name: team_id
+            description: "Identificador único del equipo."
+            tests:
+              - unique
+              - not_null
+              - relationships:
+                  to: source('kaggle_raw', 'team')
+                  field: id
+          - name: abbreviation
+            description: "Abreviatura del equipo."
+          - name: nickname
+            description: "Apodo del equipo."
+          - name: yearfounded
+            description: "Año en que se fundó el equipo."
+          - name: city
+            description: "Ciudad donde está ubicado el equipo."
+          - name: arena
+            description: "Nombre de la arena del equipo."
+          - name: arenacapacity
+            description: "Capacidad de la arena del equipo."
+          - name: owner
+            description: "Nombre del propietario del equipo."
+          - name: generalmanager
+            description: "Nombre del gerente general del equipo."
+          - name: headcoach
+            description: "Nombre del entrenador principal del equipo."
+          - name: dleagueaffiliation
+            description: "Afiliación del equipo con la liga de desarrollo."
+          - name: facebook
+            description: "Enlace o usuario de Facebook del equipo."
+          - name: instagram
+            description: "Enlace o usuario de Instagram del equipo."
+          - name: twitter
+            description: "Enlace o usuario de Twitter del equipo."
+      - name: team_history
+        description: "Tabla que contiene el historial de equipos, incluyendo su ciudad, apodo, y los años en los que estuvieron activos."
+        columns:
+          - name: team_id
+            description: "Identificador único del equipo."
+            tests:
+              - not_null
+          - name: city
+            description: "Ciudad donde estuvo ubicado el equipo."
+          - name: nickname
+            description: "Apodo del equipo."
+          - name: year_founded
+            description: "Año en que se fundó el equipo."
+          - name: year_active_till
+            description: "Año hasta el cual el equipo estuvo activo."
+      - name: officials
+        description: "Tabla que contiene información sobre los oficiales que participaron en cada juego, incluyendo identificadores y números de jersey."
+        columns:
+          - name: game_id
+            description: "Identificador único del juego."
+          - name: official_id
+            description: "Identificador único del oficial."
+          - name: first_name
+            description: "Nombre del oficial."
+          - name: last_name
+            description: "Apellido del oficial."
+          - name: jersey_num
+            description: "Número del jersey del oficial."
+      - name: draft_combine_stats
+        description: "Tabla que contiene datos sobre las estadísticas combinadas de los jugadores durante el draft."
+        columns:
+          - name: season
+            description: "Temporada del draft."
+          - name: player_id
+            description: "Identificador único del jugador."
+          - name: first_name
+            description: "Nombre del jugador."
+          - name: last_name
+            description: "Apellido del jugador."
+          - name: player_name
+            description: "Nombre completo del jugador."
+          - name: position
+            description: "Posición del jugador."
+          - name: height_wo_shoes
+            description: "Altura del jugador sin zapatos (en pulgadas)."
+          - name: height_wo_shoes_ft_in
+            description: "Altura del jugador sin zapatos en formato pies-pulgadas."
+          - name: height_w_shoes
+            description: "Altura del jugador con zapatos (en pulgadas)."
+          - name: height_w_shoes_ft_in
+            description: "Altura del jugador con zapatos en formato pies-pulgadas."
+          - name: weight
+            description: "Peso del jugador (en libras)."
+          - name: wingspan
+            description: "Envergadura del jugador (en pulgadas)."
+          - name: wingspan_ft_in
+            description: "Envergadura del jugador en formato pies-pulgadas."
+          - name: standing_reach
+            description: "Alcance de pie del jugador (en pulgadas)."
+          - name: body_fat_pct
+            description: "Porcentaje de grasa corporal del jugador."
+          - name: hand_length
+            description: "Longitud de la mano del jugador (en pulgadas)."
+          - name: hand_width
+            description: "Ancho de la mano del jugador (en pulgadas)."
+          - name: standing_vertical_leap
+            description: "Salto vertical de pie del jugador (en pulgadas)."
+          - name: max_vertical_leap
+            description: "Máximo salto vertical del jugador (en pulgadas)."
+          - name: lane_agility_time
+            description: "Tiempo de agilidad en carril (en segundos)."
+          - name: modified_lane_agility_time
+            description: "Tiempo modificado de agilidad en carril (en segundos)."
+          - name: three_quarter_sprint
+            description: "Tiempo del sprint de tres cuartos (en segundos)."
+          - name: bench_press
+            description: "Repeticiones del press de banca realizadas por el jugador."
+      - name: play_by_play
+        description: "Tabla que contiene los detalles del registro de cada jugada, incluyendo información sobre jugadores, equipos, y resultados."
+        columns:
+          - name: game_id
+            description: "Identificador único del juego."
+            tests:
+              - not_null
+          - name: eventnum
+            description: "Número de evento único dentro del juego."
+            tests:
+              - not_null
+          - name: eventmsgtype
+            description: "Tipo de mensaje del evento."
+          - name: eventmsgactiontype
+            description: "Tipo de acción asociada al mensaje del evento."
+          - name: period
+            description: "Período en el que ocurrió el evento."
+          - name: wctimestring
+            description: "Hora del evento en formato WCTIME."
+          - name: pctimestring
+            description: "Hora del evento en formato PCTIME."
+          - name: homedescription
+            description: "Descripción del evento desde la perspectiva del equipo local."
+          - name: neutraldescription
+            description: "Descripción neutral del evento."
+          - name: visitordescription
+            description: "Descripción del evento desde la perspectiva del equipo visitante."
+          - name: score
+            description: "Marcador del juego al momento del evento."
+          - name: scoremargin
+            description: "Margen del marcador al momento del evento."
+          - name: person1type
+            description: "Tipo de rol de la primera persona involucrada en el evento."
+          - name: player1_id
+            description: "Identificador del primer jugador involucrado en el evento."
+          - name: player1_name
+            description: "Nombre del primer jugador involucrado en el evento."
+          - name: player1_team_id
+            description: "Identificador del equipo del primer jugador involucrado en el evento."
+          - name: player1_team_city
+            description: "Ciudad del equipo del primer jugador involucrado en el evento."
+          - name: player1_team_nickname
+            description: "Apodo del equipo del primer jugador involucrado en el evento."
+          - name: player1_team_abbreviation
+            description: "Abreviatura del equipo del primer jugador involucrado en el evento."
+          - name: person2type
+            description: "Tipo de rol de la segunda persona involucrada en el evento."
+          - name: player2_id
+            description: "Identificador del segundo jugador involucrado en el evento."
+          - name: player2_name
+            description: "Nombre del segundo jugador involucrado en el evento."
+          - name: player2_team_id
+            description: "Identificador del equipo del segundo jugador involucrado en el evento."
+          - name: player2_team_city
+            description: "Ciudad del equipo del segundo jugador involucrado en el evento."
+          - name: player2_team_nickname
+            description: "Apodo del equipo del segundo jugador involucrado en el evento."
+          - name: player2_team_abbreviation
+            description: "Abreviatura del equipo del segundo jugador involucrado en el evento."
+          - name: person3type
+            description: "Tipo de rol de la tercera persona involucrada en el evento."
+          - name: player3_id
+            description: "Identificador del tercer jugador involucrado en el evento."
+          - name: player3_name
+            description: "Nombre del tercer jugador involucrado en el evento."
+          - name: player3_team_id
+            description: "Identificador del equipo del tercer jugador involucrado en el evento."
+          - name: player3_team_city
+            description: "Ciudad del equipo del tercer jugador involucrado en el evento."
+          - name: player3_team_nickname
+            description: "Apodo del equipo del tercer jugador involucrado en el evento."
+          - name: player3_team_abbreviation
+            description: "Abreviatura del equipo del tercer jugador involucrado en el evento."
+          - name: video_available_flag
+            description: "Indica si hay un video disponible para el evento (1: Sí, 0: No)."
