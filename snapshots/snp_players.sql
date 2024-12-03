@@ -1,4 +1,4 @@
-{% snapshot stg_games_snapshot %}
+{% snapshot stg_players_snapshot %}
 
 {{
     config(
@@ -6,13 +6,13 @@
         target_database='ALUMNO6_DEV_SILVER_DB',
         strategy='check',
         check_cols='all',
-        unique_key='GAME_ID',
+        unique_key='FULL_NAME',
         materialized='snapshot'
     )
 }}
 
 SELECT
-    {{ dbt_utils.star(from=ref('stg_games')) }}
-FROM {{ ref('stg_games') }}
+    {{ dbt_utils.star(from=ref('stg_players')) }}
+FROM {{ ref('stg_players') }}
 
 {% endsnapshot %}
