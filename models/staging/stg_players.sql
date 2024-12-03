@@ -22,9 +22,9 @@ bs_draft as (
 )
 
 SELECT 
-    p.{{ dbt_utils.star(from=ref('base_player')) }},
-    i.{{ dbt_utils.star(from=ref('base_common_player_info'), except=['PLAYER_ID']) }},
-    d.{{ dbt_utils.star(from=ref('base_player_draft_history'), except=['PLAYER_ID', 'PLAYER_NAME']) }}
+    {{ dbt_utils.star(from=ref('base_player'),relation_alias='p') }},
+    {{ dbt_utils.star(from=ref('base_common_player_info'), except=['PLAYER_ID'], relation_alias='i') }},
+    {{ dbt_utils.star(from=ref('base_player_draft_history'), except=['PLAYER_ID', 'PLAYER_NAME'], relation_alias='d') }}
 FROM 
     bs_player p
 LEFT JOIN bs_info i

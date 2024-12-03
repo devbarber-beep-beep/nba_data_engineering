@@ -148,6 +148,9 @@ sources:
             description: "Identificador único del equipo local."
             tests:
               - not_null
+              - relationships:
+                  to: source('kaggle_raw', 'team')
+                  field: team_id
           - name: team_abbreviation_home
             description: "Abreviatura del equipo local."
             tests:
@@ -173,6 +176,9 @@ sources:
             description: "Identificador único del equipo visitante."
             tests:
               - not_null
+              - relationships:
+                  to: source('kaggle_raw', 'team')
+                  field: team_id
           - name: team_abbreviation_away
             description: "Abreviatura del equipo visitante."
             tests:

@@ -21,17 +21,17 @@ snapshots:
       - name: dbt_valid_to
         description: Fecha en que el registro dejó de ser válido. Nulo si el registro sigue siendo válido.
 
-  - name: stg_players_snapshot
+  - name: bs_players_snapshot
     description: >
       Este snapshot almacena el historial de jugadores, detectando cambios
       en los datos provenientes de `stg_players`. Es útil para análisis histórico
       de jugadores y su relación con diferentes partidos.
     config:
-      unique_key: FULL_NAME
+      unique_key: PLAYER_ID
       strategy: check
       check_cols: ['*']
     columns:
-      - name: FULL_NAME
+      - name: PLAYER_ID
         description: Identificador único del jugador.
         tests:
           - not_null
