@@ -1,1 +1,878 @@
 version: 2
+
+models:
+  - name: stg_time
+    description: "Tabla de dimensiones de tiempo."
+    columns:
+      - name: date_id
+        description: "Identificador único para las fechas."
+        tests:
+          - not_null
+          - unique
+  - name: stg_draft_combine_stats
+    description: "Estadísticas del draft combine de jugadores."
+    columns:
+      - name: draft_combine_stats_id
+        description: "Identificador único para las estadísticas del draft combine."
+        tests:
+          - not_null
+          - unique
+      - name: player_id
+        description: "Identificador único del jugador."
+        tests:
+          - not_null
+      - name: player_name
+        description: "Nombre completo del jugador."
+        tests:
+          - not_null
+      - name: first_name
+        description: "Nombre del jugador."
+      - name: last_name
+        description: "Apellido del jugador."
+      - name: position
+        description: "Posición del jugador."
+      - name: season
+        description: "Temporada del draft combine."
+        tests:
+          - not_null
+      - name: height_wo_shoes
+        description: "Altura del jugador sin zapatos (en pulgadas)."
+      - name: height_w_shoes
+        description: "Altura del jugador con zapatos (en pulgadas)."
+      - name: weight
+        description: "Peso del jugador (en libras)."
+      - name: wingspan
+        description: "Envergadura del jugador (en pulgadas)."
+      - name: standing_reach
+        description: "Alcance del jugador de pie (en pulgadas)."
+      - name: body_fat_pct
+        description: "Porcentaje de grasa corporal del jugador."
+      - name: hand_length
+        description: "Longitud de la mano del jugador (en pulgadas)."
+      - name: hand_width
+        description: "Ancho de la mano del jugador (en pulgadas)."
+      - name: standing_vertical_leap
+        description: "Salto vertical de pie del jugador (en pulgadas)."
+      - name: max_vertical_leap
+        description: "Salto vertical máximo del jugador (en pulgadas)."
+      - name: lane_agility_time
+        description: "Tiempo de agilidad en carril (en segundos)."
+      - name: modified_lane_agility_time
+        description: "Tiempo modificado de agilidad en carril (en segundos)."
+      - name: three_quarter_sprint
+        description: "Tiempo de sprint de tres cuartos (en segundos)."
+      - name: press_banca
+        description: "Repeticiones del press de banca realizadas por el jugador."
+  - name: stg_games
+    description: "Información sobre los partidos jugados y estadísticas del equipo local y visitante."
+    columns:
+      - name: attendance
+        description: "Número de asistentes al juego."
+        
+      - name: game_time
+        description: "Hora en la que se jugó el partido."
+        
+      - name: game_id
+        description: "Identificador único del partido."
+        tests:
+          - not_null
+          - unique
+      - name: season_id
+        description: "Identificador de la temporada a la que pertenece el partido."
+        tests:
+          - not_null
+      - name: season_type
+        description: "Tipo de temporada (e.g., Regular, Playoffs)."
+        
+      - name: game_date
+        description: "Fecha en la que se jugó el partido."
+        tests:
+          - not_null
+
+      # Estadísticas del equipo local
+      - name: team_id_home
+        description: "ID del equipo local."
+        
+      - name: equipo_abrev_loc
+        description: "Abreviatura del equipo local."
+        
+      - name: equipo_nom_loc
+        description: "Nombre del equipo local."
+        
+      - name: enfrent_loc
+        description: "Detalles del enfrentamiento del equipo local."
+        
+      - name: result_loc
+        description: "Resultado del equipo local (Victoria/Derrota)."
+        
+      - name: minutos_loc
+        description: "Minutos jugados por el equipo local."
+        
+      - name: tc_enc_loc
+        description: "Tiros de campo encestados por el equipo local."
+        
+      - name: tc_int_loc
+        description: "Tiros de campo intentados por el equipo local."
+        
+      - name: tc_pct_loc
+        description: "Porcentaje de tiros de campo del equipo local."
+        
+      - name: t3_enc_loc
+        description: "Tiros de tres puntos encestados por el equipo local."
+        
+      - name: t3_int_loc
+        description: "Tiros de tres puntos intentados por el equipo local."
+        
+      - name: t3_pct_porc_loc
+        description: "Porcentaje de tiros de tres puntos del equipo local."
+        
+      - name: tl_enc_loc
+        description: "Tiros libres encestados por el equipo local."
+        
+      - name: tl_int_loc
+        description: "Tiros libres intentados por el equipo local."
+        
+      - name: tl_pct_loc
+        description: "Porcentaje de tiros libres del equipo local."
+        
+      - name: reb_of_loc
+        description: "Rebotes ofensivos del equipo local."
+        
+      - name: reb_def_loc
+        description: "Rebotes defensivos del equipo local."
+        
+      - name: reb_tot_loc
+        description: "Rebotes totales del equipo local."
+        
+      - name: asist_loc
+        description: "Asistencias realizadas por el equipo local."
+        
+      - name: robos_loc
+        description: "Robos realizados por el equipo local."
+        
+      - name: tapones_loc
+        description: "Tapones realizados por el equipo local."
+        
+      - name: perdidas_loc
+        description: "Pérdidas de balón del equipo local."
+        
+      - name: faltas_loc
+        description: "Faltas cometidas por el equipo local."
+        
+      - name: pts_loc
+        description: "Puntos anotados por el equipo local."
+        
+      - name: pm_loc
+        description: "Valor Plus-Minus del equipo local."
+        
+      - name: video_available_home
+        description: "Indica si el video está disponible para el equipo local."
+        
+
+      # Estadísticas del equipo visitante
+      - name: team_id_away
+        description: "ID del equipo visitante."
+        
+      - name: equipo_abrev_vis
+        description: "Abreviatura del equipo visitante."
+        
+      - name: equipo_nom_vis
+        description: "Nombre del equipo visitante."
+        
+      - name: enfrent_vis
+        description: "Detalles del enfrentamiento del equipo visitante."
+        
+      - name: result_vis
+        description: "Resultado del equipo visitante (Victoria/Derrota)."
+        
+      - name: tc_enc_vis
+        description: "Tiros de campo encestados por el equipo visitante."
+        
+      - name: tc_int_vis
+        description: "Tiros de campo intentados por el equipo visitante."
+        
+      - name: tc_pct_vis
+        description: "Porcentaje de tiros de campo del equipo visitante."
+        
+      - name: t3_enc_vis
+        description: "Tiros de tres puntos encestados por el equipo visitante."
+        
+      - name: t3_int_vis
+        description: "Tiros de tres puntos intentados por el equipo visitante."
+        
+      - name: t3_pct_porc_vis
+        description: "Porcentaje de tiros de tres puntos del equipo visitante."
+        
+      - name: tl_enc_vis
+        description: "Tiros libres encestados por el equipo visitante."
+        
+      - name: tl_int_vis
+        description: "Tiros libres intentados por el equipo visitante."
+        
+      - name: tl_pct_vis
+        description: "Porcentaje de tiros libres del equipo visitante."
+        
+      - name: reb_of_vis
+        description: "Rebotes ofensivos del equipo visitante."
+        
+      - name: reb_def_vis
+        description: "Rebotes defensivos del equipo visitante."
+        
+      - name: reb_tot_vis
+        description: "Rebotes totales del equipo visitante."
+        
+      - name: asist_vis
+        description: "Asistencias realizadas por el equipo visitante."
+        
+      - name: robos_vis
+        description: "Robos realizados por el equipo visitante."
+        
+      - name: tapones_vis
+        description: "Tapones realizados por el equipo visitante."
+        
+      - name: perdidas_vis
+        description: "Pérdidas de balón del equipo visitante."
+        
+      - name: faltas_vis
+        description: "Faltas cometidas por el equipo visitante."
+        
+      - name: pts_vis
+        description: "Puntos anotados por el equipo visitante."
+        
+      - name: pm_vis
+        description: "Valor Plus-Minus del equipo visitante."
+        
+      - name: video_available_away
+        description: "Indica si el video está disponible para el equipo visitante."
+        
+  - name: stg_game_scores
+    description: "Puntuaciones detalladas de los juegos."
+    columns:
+      - name: score_id
+        description: "Identificador único de la puntuación."
+        tests:
+          - not_null
+          - unique
+      - name: game_id
+        description: "Identificador del juego."
+        tests:
+          - not_null
+      - name: game_date_est
+        description: "Fecha del juego en hora estándar del este."
+        tests:
+          - not_null
+      - name: game_sequence
+        description: "Secuencia del juego."
+        
+      - name: team_id_home
+        description: "Identificador del equipo local."
+        
+      - name: equipo_abrev_loc
+        description: "Abreviatura del equipo local."
+        
+      - name: ciudad_equipo_loc
+        description: "Ciudad del equipo local."
+        
+      - name: apodo_equipo_loc
+        description: "Apodo del equipo local."
+        
+      - name: record_equipo_loc
+        description: "Récord del equipo local."
+        
+      - name: pts_t1_loc
+        description: "Puntos del primer cuarto local."
+        
+      - name: pts_t2_loc
+        description: "Puntos del segundo cuarto local."
+        
+      - name: pts_t3_loc
+        description: "Puntos del tercer cuarto local."
+        
+      - name: pts_t4_loc
+        description: "Puntos del cuarto cuarto local."
+        
+      - name: pts_ot1_loc
+        description: "Puntos del primer tiempo extra local."
+        
+      - name: pts_ot2_loc
+        description: "Puntos del segundo tiempo extra local."
+        
+      - name: pts_ot3_loc
+        description: "Puntos del tercer tiempo extra local."
+        
+      - name: pts_ot4_loc
+        description: "Puntos del cuarto tiempo extra local."
+        
+      - name: pts_ot5_loc
+        description: "Puntos del quinto tiempo extra local."
+        
+      - name: pts_ot6_loc
+        description: "Puntos del sexto tiempo extra local."
+        
+      - name: pts_ot7_loc
+        description: "Puntos del séptimo tiempo extra local."
+        
+      - name: pts_ot8_loc
+        description: "Puntos del octavo tiempo extra local."
+        
+      - name: pts_ot9_loc
+        description: "Puntos del noveno tiempo extra local."
+        
+      - name: pts_ot10_loc
+        description: "Puntos del décimo tiempo extra local."
+        
+      - name: pts_loc
+        description: "Total de puntos del equipo local."
+        
+      - name: team_id_away
+        description: "Identificador del equipo visitante."
+        
+      - name: equipo_abrev_vis
+        description: "Abreviatura del equipo visitante."
+        
+      - name: ciudad_equipo_vis
+        description: "Ciudad del equipo visitante."
+        
+      - name: apodo_equipo_vis
+        description: "Apodo del equipo visitante."
+        
+      - name: record_equipo_vis
+        description: "Récord del equipo visitante."
+        
+      - name: pts_t1_vis
+        description: "Puntos del primer cuarto visitante."
+        
+      - name: pts_t2_vis
+        description: "Puntos del segundo cuarto visitante."
+        
+      - name: pts_t3_vis
+        description: "Puntos del tercer cuarto visitante."
+        
+      - name: pts_t4_vis
+        description: "Puntos del cuarto cuarto visitante."
+        
+      - name: pts_ot1_vis
+        description: "Puntos del primer tiempo extra visitante."
+        
+      - name: pts_ot2_vis
+        description: "Puntos del segundo tiempo extra visitante."
+        
+      - name: pts_ot3_vis
+        description: "Puntos del tercer tiempo extra visitante."
+        
+      - name: pts_ot4_vis
+        description: "Puntos del cuarto tiempo extra visitante."
+        
+      - name: pts_ot5_vis
+        description: "Puntos del quinto tiempo extra visitante."
+        
+      - name: pts_ot6_vis
+        description: "Puntos del sexto tiempo extra visitante."
+        
+      - name: pts_ot7_vis
+        description: "Puntos del séptimo tiempo extra visitante."
+        
+      - name: pts_ot8_vis
+        description: "Puntos del octavo tiempo extra visitante."
+        
+      - name: pts_ot9_vis
+        description: "Puntos del noveno tiempo extra visitante."
+        
+      - name: pts_ot10_vis
+        description: "Puntos del décimo tiempo extra visitante."
+        
+      - name: pts_vis
+        description: "Total de puntos del equipo visitante."
+        
+
+  - name: stg_officials
+    description: "Información sobre los oficiales en cada juego."
+    columns:
+      - name: official_by_game_id
+        description: "Identificador único para el oficial en un juego específico."
+        tests:
+          - not_null
+          - unique
+      - name: game_id
+        description: "Identificador único del juego."
+        tests:
+          - not_null
+      - name: official_id
+        description: "Identificador único del oficial."
+        tests:
+          - not_null
+      - name: first_name
+        description: "Nombre del oficial."
+        
+      - name: last_name
+        description: "Apellido del oficial."
+        
+      - name: jersey_num
+        description: "Número del jersey del oficial."
+        
+
+  - name: stg_game_stats
+    description: "Estadísticas detalladas de los juegos y equipos participantes."
+    columns:
+      - name: game_id
+        description: "Identificador único del juego."
+        tests:
+          - not_null
+      - name: game_status_id
+        description: "Identificador del estado del juego."
+        
+      - name: game_date_est
+        description: "Fecha estimada del juego."
+        tests:
+          - not_null
+      - name: game_sequence
+        description: "Secuencia del juego."
+        
+      - name: game_status_text
+        description: "Texto que describe el estado del juego."
+        
+      - name: gamecode
+        description: "Código del juego."
+        
+      - name: team_id_home
+        description: "Identificador del equipo local."
+        tests:
+          - not_null
+        
+      - name: team_id_away
+        description: "Identificador del equipo visitante."
+        tests:
+          - not_null
+        
+      - name: season
+        description: "Temporada en la que se jugó el partido."
+        tests:
+          - not_null
+      - name: live_period
+        description: "Período en vivo del juego."
+        
+      - name: live_pc_time
+        description: "Tiempo en vivo registrado en PC."
+        
+      - name: natl_tv_broadcaster_abbreviation
+        description: "Abreviatura del canal nacional de TV."
+        
+      - name: live_period_time_bcast
+        description: "Tiempo de transmisión del período en vivo."
+        
+      - name: wh_status
+        description: "Estado 'WH'."
+        
+      - name: league_id
+        description: "Identificador de la liga."
+        
+      - name: team_abbreviation_home
+        description: "Abreviatura del equipo local."
+        
+      - name: team_city_home
+        description: "Ciudad del equipo local."
+        
+      - name: pts_paint_home
+        description: "Puntos en la pintura del equipo local."
+        
+      - name: pts_2nd_chance_home
+        description: "Puntos de segundas oportunidades del equipo local."
+        
+      - name: pts_fb_home
+        description: "Puntos en contragolpe del equipo local."
+        
+      - name: largest_lead_home
+        description: "Mayor ventaja del equipo local."
+        
+      - name: lead_changes
+        description: "Cambios de liderato en el juego."
+        
+      - name: times_tied
+        description: "Veces que el marcador estuvo empatado."
+        
+      - name: team_turnovers_home
+        description: "Pérdidas de balón del equipo local."
+        
+      - name: total_turnovers_home
+        description: "Total de pérdidas del equipo local."
+        
+      - name: team_rebounds_home
+        description: "Rebotes del equipo local."
+        
+      - name: pts_off_to_home
+        description: "Puntos por pérdidas del equipo local."
+        
+      - name: team_abbreviation_away
+        description: "Abreviatura del equipo visitante."
+        
+      - name: team_city_away
+        description: "Ciudad del equipo visitante."
+        
+      - name: pts_paint_away
+        description: "Puntos en la pintura del equipo visitante."
+        
+      - name: pts_2nd_chance_away
+        description: "Puntos de segundas oportunidades del equipo visitante."
+        
+      - name: pts_fb_away
+        description: "Puntos en contragolpe del equipo visitante."
+        
+      - name: largest_lead_away
+        description: "Mayor ventaja del equipo visitante."
+        
+      - name: team_turnovers_away
+        description: "Pérdidas de balón del equipo visitante."
+        
+      - name: total_turnovers_away
+        description: "Total de pérdidas del equipo visitante."
+        
+      - name: team_rebounds_away
+        description: "Rebotes del equipo visitante."
+        
+      - name: pts_off_to_away
+        description: "Puntos por pérdidas del equipo visitante."
+        
+
+  - name: stg_players
+    description: "Información detallada sobre los jugadores."
+    columns:
+      - name: player_id
+        description: "Identificador único del jugador."
+        tests:
+          - not_null
+      - name: full_name
+        description: "Nombre completo del jugador."
+        tests:
+          - not_null
+      - name: first_name
+        description: "Nombre del jugador."
+        
+      - name: last_name
+        description: "Apellido del jugador."
+        
+      - name: is_active
+        description: "Indica si el jugador está activo."
+        
+      - name: height_in_feet
+        description: "Altura del jugador en pies."
+        
+      - name: height_in_meters
+        description: "Altura del jugador en metros."
+        
+      - name: weight
+        description: "Peso del jugador."
+        
+      - name: display_first_last
+        description: "Nombre completo en formato estándar."
+        
+      - name: player_slug
+        description: "Slug único del jugador."
+        
+      - name: birthdate_utc
+        description: "Fecha de nacimiento del jugador en UTC."
+        
+      - name: school
+        description: "Escuela o universidad del jugador."
+        
+      - name: country
+        description: "País de origen del jugador."
+        
+      - name: last_affiliation
+        description: "Última afiliación profesional o amateur."
+        
+      - name: season_exp
+        description: "Número de temporadas jugadas."
+        
+      - name: jersey
+        description: "Número de camiseta del jugador."
+        
+      - name: position
+        description: "Posición del jugador."
+        
+      - name: rosterstatus
+        description: "Estado del jugador en el equipo."
+        
+      - name: team_id
+        description: "Identificador del equipo al que pertenece el jugador."
+        tests:
+          - not_null
+        
+      - name: team_code
+        description: "Código del equipo."
+        
+      - name: team_name
+        description: "Nombre del equipo."
+        
+      - name: team_abbreviation
+        description: "Abreviatura del equipo."
+        
+      - name: team_city
+        description: "Ciudad del equipo."
+        
+      - name: playercode
+        description: "Código único del jugador."
+        
+      - name: display_last_comma_first
+        description: "Nombre en formato 'Apellido, Nombre'."
+        
+      - name: display_fi_last
+        description: "Nombre en formato 'F. Apellido'."
+        
+      - name: from_year
+        description: "Año de inicio de la carrera del jugador."
+        
+      - name: to_year
+        description: "Año de finalización de la carrera del jugador."
+        
+      - name: draft_year
+        description: "Año del draft del jugador."
+        
+      - name: draft_round
+        description: "Ronda del draft en la que fue seleccionado."
+        
+      - name: draft_number
+        description: "Número del draft del jugador."
+        
+      - name: games_played_current_season_flag
+        description: "Indica si el jugador ha jugado esta temporada."
+        
+      - name: dleague_flag
+        description: "Indica si el jugador participó en la liga de desarrollo."
+        
+      - name: nba_flag
+        description: "Indica si el jugador participó en la NBA."
+        
+      - name: games_played_flag
+        description: "Indica si el jugador tiene juegos jugados."
+        
+      - name: greatest_75_flag
+        description: "Indica si el jugador pertenece a los 75 mejores jugadores de la NBA."
+        
+      - name: draft_season
+        description: "Temporada en la que ocurrió el draft."
+        
+      - name: draft_round_number
+        description: "Número de la ronda del draft."
+        
+      - name: draft_round_pick
+        description: "Número de selección en la ronda del draft."
+        
+      - name: draft_overall_pick
+        description: "Número total de selección en el draft."
+        
+      - name: draft_draft_type
+        description: "Tipo de draft."
+        
+      - name: draft_team_id
+        description: "ID del equipo que seleccionó al jugador."
+        
+      - name: draft_team_city
+        description: "Ciudad del equipo que seleccionó al jugador."
+        
+      - name: draft_team_name
+        description: "Nombre del equipo que seleccionó al jugador."
+        
+      - name: draft_team_abbreviation
+        description: "Abreviatura del equipo que seleccionó al jugador."
+        
+      - name: draft_organization
+        description: "Organización asociada al jugador en el draft."
+        
+      - name: draft_organization_type
+        description: "Tipo de organización asociada al jugador (e.g., universidad, internacional)."
+        
+      - name: draft_player_profile_flag
+        description: "Indica si existe un perfil del jugador en el sistema."
+        
+
+  - name: stg_play_by_play
+    description: "Registra los eventos jugada a jugada de los partidos, incluyendo detalles de jugadores y puntuaciones."
+    columns:
+      - name: pbp_id
+        description: "Identificador único para cada evento en el registro de jugadas."
+        tests:
+          - not_null
+          - unique
+      - name: game_id
+        description: "Identificador del juego al que pertenece el evento."
+        
+      - name: eventnum
+        description: "Número de evento único dentro del juego."
+        
+      - name: eventmsgtype
+        description: "Tipo de mensaje asociado al evento."
+        
+      - name: eventmsgactiontype
+        description: "Tipo de acción asociada al mensaje del evento."
+        
+      - name: period
+        description: "Período del juego en el que ocurrió el evento."
+        
+      - name: wctimestring
+        description: "Hora del evento en formato WCTIME."
+        
+      - name: pctimestring
+        description: "Hora del evento en formato PCTIME."
+        
+      - name: homedescription
+        description: "Descripción del evento desde la perspectiva del equipo local."
+        
+      - name: neutraldescription
+        description: "Descripción neutral del evento."
+        
+      - name: visitordescription
+        description: "Descripción del evento desde la perspectiva del equipo visitante."
+        
+      - name: score
+        description: "Marcador del juego al momento del evento."
+        
+      - name: scoremargin
+        description: "Diferencia en el marcador entre ambos equipos."
+        
+      - name: person1type
+        description: "Tipo de rol de la primera persona involucrada en el evento."
+        
+      - name: player1_id
+        description: "Identificador del primer jugador involucrado en el evento."
+        
+      - name: player1_name
+        description: "Nombre del primer jugador involucrado en el evento."
+        
+      - name: player1_team_id
+        description: "Identificador del equipo del primer jugador."
+        
+      - name: player1_team_city
+        description: "Ciudad del equipo del primer jugador."
+        
+      - name: player1_team_nickname
+        description: "Apodo del equipo del primer jugador."
+        
+      - name: player1_team_abbreviation
+        description: "Abreviatura del equipo del primer jugador."
+        
+      - name: person2type
+        description: "Tipo de rol de la segunda persona involucrada en el evento."
+        
+      - name: player2_id
+        description: "Identificador del segundo jugador involucrado en el evento."
+        
+      - name: player2_name
+        description: "Nombre del segundo jugador involucrado en el evento."
+        
+      - name: player2_team_id
+        description: "Identificador del equipo del segundo jugador."
+        
+      - name: player2_team_city
+        description: "Ciudad del equipo del segundo jugador."
+        
+      - name: player2_team_nickname
+        description: "Apodo del equipo del segundo jugador."
+        
+      - name: player2_team_abbreviation
+        description: "Abreviatura del equipo del segundo jugador."
+        
+      - name: person3type
+        description: "Tipo de rol de la tercera persona involucrada en el evento."
+        
+      - name: player3_id
+        description: "Identificador del tercer jugador involucrado en el evento."
+        
+      - name: player3_name
+        description: "Nombre del tercer jugador involucrado en el evento."
+        
+      - name: player3_team_id
+        description: "Identificador del equipo del tercer jugador."
+        
+      - name: player3_team_city
+        description: "Ciudad del equipo del tercer jugador."
+        
+      - name: player3_team_nickname
+        description: "Apodo del equipo del tercer jugador."
+        
+      - name: player3_team_abbreviation
+        description: "Abreviatura del equipo del tercer jugador."
+        
+      - name: video_available_flag
+        description: "Indica si hay un video disponible para el evento (1: Sí, 0: No)."
+        
+
+  - name: stg_teams
+    description: "Información sobre los equipos, incluyendo su nombre, apodo, ciudad, entrenador, y más."
+    columns:
+      - name: team_id
+        description: "Identificador único del equipo."
+        tests:
+          - not_null
+          - unique
+      - name: full_name
+        description: "Nombre completo del equipo."
+        
+      - name: abbreviation
+        description: "Abreviatura del equipo."
+        
+      - name: nickname
+        description: "Apodo del equipo."
+        
+      - name: city
+        description: "Ciudad donde está ubicado el equipo."
+        
+      - name: state
+        description: "Estado o provincia donde está ubicado el equipo."
+        
+      - name: year_founded
+        description: "Año en que se fundó el equipo."
+        
+      - name: arena
+        description: "Nombre de la arena del equipo."
+        
+      - name: arenacapacity
+        description: "Capacidad de la arena del equipo."
+        
+      - name: owner
+        description: "Propietario del equipo."
+        
+      - name: generalmanager
+        description: "Gerente general del equipo."
+        
+      - name: headcoach
+        description: "Entrenador principal del equipo."
+        
+      - name: dleagueaffiliation
+        description: "Afiliación del equipo con la liga de desarrollo."
+        
+      - name: team_history_id
+        description: "Identificador único del historial del equipo."
+        
+      - name: facebook
+        description: "Enlace o usuario de Facebook del equipo."
+        
+      - name: instagram
+        description: "Enlace o usuario de Instagram del equipo."
+        
+      - name: twitter
+        description: "Enlace o usuario de Twitter del equipo."
+        
+
+  - name: stg_team_history
+    description: "Historial de los equipos, incluyendo la ciudad, apodo, y los años de actividad."
+    columns:
+      - name: team_history_id
+        description: "Identificador único del historial."
+        tests:
+          - not_null
+          - unique
+      - name: team_id
+        description: "Identificador único del equipo."
+        
+      - name: city
+        description: "Ciudad donde estuvo ubicado el equipo."
+        
+      - name: nickname
+        description: "Apodo del equipo."
+        
+      - name: year_founded
+        description: "Año en que se fundó el equipo."
+        
+      - name: year_active_till
+        description: "Año hasta el cual el equipo estuvo activo."
+        

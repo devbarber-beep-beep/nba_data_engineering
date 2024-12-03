@@ -9,10 +9,15 @@
 WITH bs_officials AS (
     SELECT * 
     FROM {{ ref('base__officials') }}
-)
+),
 
-SELECT 
-    {{ dbt_utils.generate_surrogate_key(['OFFICIAL_ID', 'GAME_ID']) }} as official_by_game_id,
+with_duplicated as (SELECT 
+    {{ dbt_utils.generate_surrogate_key(['OFFICIAL_ID', 'GAME_ID', 'LAST_NAME']) }} as official_by_game_id,
     {{ dbt_utils.star(from=ref('base__officials')) }},
 FROM 
     bs_officials
+)
+
+SELECT 
+distinct official_by_game_id, {{ dbt_utils.star(from=ref('base__officials')) }}
+from with_duplicated

@@ -19,8 +19,8 @@ bs_info as (
 bs_draft as (
     select * 
     from {{ ref("base_player_draft_history") }}
-)
-
+),
+with_errors as (
 SELECT 
     {{ dbt_utils.star(from=ref('base_player'),relation_alias='p') }},
     {{ dbt_utils.star(from=ref('base_common_player_info'), except=['PLAYER_ID'], relation_alias='i') }},
@@ -31,3 +31,7 @@ LEFT JOIN bs_info i
 ON p.PLAYER_ID = i.PLAYER_ID
 LEFT JOIN bs_draft d
 on p.PLAYER_ID = d.PLAYER_ID
+)
+
+select * from with_errors
+where team_id is not null
