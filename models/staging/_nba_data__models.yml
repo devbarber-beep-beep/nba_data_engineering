@@ -92,6 +92,9 @@ models:
       # Estadísticas del equipo local
       - name: team_id_home
         description: "ID del equipo local."
+        tests:
+          - not_null
+
         
       - name: equipo_abrev_loc
         description: "Abreviatura del equipo local."
@@ -172,6 +175,8 @@ models:
       # Estadísticas del equipo visitante
       - name: team_id_away
         description: "ID del equipo visitante."
+        tests:
+          - not_null
         
       - name: equipo_abrev_vis
         description: "Abreviatura del equipo visitante."
