@@ -1,11 +1,3 @@
-{{
-  config(
-    database='ALUMNO6_DEV_GOLD_DB',
-    materialized='table',
-    schema='players'
-  )
-}}
-
 WITH player_data AS (
     -- Extraemos estadísticas individuales con información de temporada
     SELECT
@@ -45,7 +37,13 @@ player_efficiency AS (
         ROUND(
             (p.TOTAL_POINTS + p.TOTAL_REBOUNDS + p.TOTAL_ASSISTS + p.TOTAL_STEALS + p.TOTAL_BLOCKS
             - p.TOTAL_TURNOVERS) / NULLIF(p.GAMES_PLAYED, 0), 2
-        ) AS PER
+        ) AS PER,
+        ROUND(p.TOTAL_POINTS / NULLIF(p.GAMES_PLAYED, 0), 2) AS POINTS_PER_GAME,
+        ROUND(p.TOTAL_REBOUNDS / NULLIF(p.GAMES_PLAYED, 0), 2) AS REBOUNDS_PER_GAME,
+        ROUND(p.TOTAL_ASSISTS / NULLIF(p.GAMES_PLAYED, 0), 2) AS ASSISTS_PER_GAME,
+        ROUND(p.TOTAL_BLOCKS / NULLIF(p.GAMES_PLAYED, 0), 2) AS BLOCKS_PER_GAME,
+        ROUND(p.TOTAL_STEALS / NULLIF(p.GAMES_PLAYED, 0), 2) AS STEALS_PER_GAME,
+        ROUND(p.TOTAL_TURNOVERS / NULLIF(p.GAMES_PLAYED, 0), 2) AS TURNOVERS_PER_GAME
     FROM player_data p
 )
 SELECT
@@ -59,8 +57,17 @@ SELECT
     pe.TOTAL_TURNOVERS,
     pe.GAMES_PLAYED,
     pe.PER,
-    dp.FULL_NAME AS PLAYER_NAME
+    pe.POINTS_PER_GAME,
+    pe.REBOUNDS_PER_GAME,
+    pe.ASSISTS_PER_GAME,
+    pe.BLOCKS_PER_GAME,
+    pe.STEALS_PER_GAME,
+    pe.TURNOVERS_PER_GAME,
+    dp.FULL_NAME AS PLAYER_NAME,
+    t.FULL_NAME AS TEAM_NAME
 FROM player_efficiency pe
 LEFT JOIN {{ ref('dim_players') }} dp
   ON pe.PLAYER_ID = dp.PLAYER_ID
+LEFT JOIN {{ ref('dim_teams') }} t
+  ON dp.TEAM_ID = t.TEAM_ID
 WHERE dp.FULL_NAME IS NOT NULL

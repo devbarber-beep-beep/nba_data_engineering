@@ -94,8 +94,7 @@ models:
         description: "ID del equipo local."
         tests:
           - not_null
-
-        
+       
       - name: equipo_abrev_loc
         description: "Abreviatura del equipo local."
         
@@ -557,7 +556,9 @@ models:
         
       - name: is_active
         description: "Indica si el jugador está activo."
-        
+      - name: height
+        description: "Altura del jugador."  
+      
       - name: height_in_feet
         description: "Altura del jugador en pies."
         
