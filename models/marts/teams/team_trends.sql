@@ -65,6 +65,7 @@ final_trends AS (
     FROM aggregated_trends
 )
 SELECT
+    {{ dbt_utils.generate_surrogate_key(['t.TEAM_ID', 't.SEASON_ID', 't.GAME_MONTH', 't.GAME_DAY']) }} as trend_id,
     t.TEAM_ID,
     t.SEASON_ID,
     t.GAME_MONTH,

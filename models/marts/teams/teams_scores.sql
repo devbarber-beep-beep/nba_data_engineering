@@ -33,6 +33,7 @@ WITH games_data AS (
         CASE WHEN RESULT_VIS = 'W' THEN 1 ELSE 0 END AS WIN,
         CASE WHEN RESULT_VIS = 'L' THEN 1 ELSE 0 END AS LOSS
     FROM {{ ref('fct_games') }}
+    where TEAM_ID_AWAY is not null
 ),
 aggregated_data AS (
     -- Agregamos los datos por equipo y temporada
@@ -111,9 +112,10 @@ current_streak AS (
     GROUP BY TEAM_ID, SEASON_ID, SEASON_TYPE  -- Agrupamos también por tipo de temporada
 )
 SELECT
+    {{ dbt_utils.generate_surrogate_key(['ti.TEAM_ID', 'ti.SEASON_ID', 'ti.SEASON_TYPE']) }} as score_id,
     ti.TEAM_ID,
     ti.SEASON_ID,
-    ti.SEASON_TYPE,  -- Seleccionamos el tipo de temporada
+    ti.SEASON_TYPE,
     ti.TEAM_NAME,
     ti.TEAM_ABBREVIATION,
     ti.TOTAL_POINTS,

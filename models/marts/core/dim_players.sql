@@ -7,5 +7,7 @@
 }}
 
 
-SELECT * 
+SELECT distinct
+    PLAYER_ID,
+    {{ dbt_utils.star(from=ref('stg_players'), except=['PLAYER_ID']) }},
 FROM {{ ref('stg_players') }}
