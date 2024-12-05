@@ -7,7 +7,9 @@
 }}
 
 WITH bs_team AS (
-    SELECT * 
+    SELECT 
+    {{ dbt_utils.star(from=ref('base__team')) }},
+    {{ dbt_utils.generate_surrogate_key(['TEAM_ID', 'YEAR_FOUNDED', 'CITY']) }} as team_history_id,
     FROM {{ ref('base__team') }}
 ),
 
@@ -18,6 +20,7 @@ bs_details as (
 
 SELECT 
     t.{{ dbt_utils.star(from=ref('base__team')) }},
+    t.team_history_id,
     {{ dbt_utils.star(from=ref('base__team_details'), except=['TEAM_ID', 'ABBREVIATION', 'CITY', 'NICKNAME', 'YEARFOUNDED' ]) }},
 FROM 
     bs_team t

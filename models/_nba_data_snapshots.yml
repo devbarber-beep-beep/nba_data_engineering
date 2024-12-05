@@ -1,0 +1,81 @@
+version: 2
+
+snapshots:
+  - name: stg_draft_combine_stats_snapshot
+    description: >
+      Este snapshot captura el estado histórico de las estadísticas combinadas
+      del draft. Detecta cambios o nuevos registros en la tabla `stg_draft_combine_stats`
+      y almacena el historial para análisis temporal.
+    config:
+      unique_key: DRAFT_COMBINE_STATS_ID
+      strategy: check
+      check_cols: ['*']
+    columns:
+      - name: DRAFT_COMBINE_STATS_ID
+        description: Identificador único del stat.
+        tests:
+          - unique
+          - not_null
+      - name: dbt_valid_from
+        description: Fecha en que el registro comenzó a ser válido.
+      - name: dbt_valid_to
+        description: Fecha en que el registro dejó de ser válido. Nulo si el registro sigue siendo válido.
+
+  - name: bs_players_snapshot
+    description: >
+      Este snapshot almacena el historial de jugadores, detectando cambios
+      en los datos provenientes de `stg_players`. Es útil para análisis histórico
+      de jugadores y su relación con diferentes partidos.
+    config:
+      unique_key: PLAYER_ID
+      strategy: check
+      check_cols: ['*']
+    columns:
+      - name: PLAYER_ID
+        description: Identificador único del jugador.
+        tests:
+          - not_null
+      - name: dbt_valid_from
+        description: Fecha en que el registro comenzó a ser válido.
+      - name: dbt_valid_to
+        description: Fecha en que el registro dejó de ser válido. Nulo si el registro sigue siendo válido.
+
+  - name: stg_teams_histoy_snapshot
+    description: >
+      Este snapshot almacena el historial de cambios en la información del equipo.
+      Los datos provienen de `stg_team_history`, y permiten analizar cómo la información
+      de los equipos ha evolucionado con el tiempo.
+    config:
+      unique_key: TEAM_HISTORY_ID
+      strategy: check
+      check_cols: ['*']
+    columns:
+      - name: TEAM_HISTORY_ID
+        description: Identificador único del equipo.
+        tests:
+          - unique
+          - not_null
+      - name: dbt_valid_from
+        description: Fecha en que el registro comenzó a ser válido.
+      - name: dbt_valid_to
+        description: Fecha en que el registro dejó de ser válido. Nulo si el registro sigue siendo válido.
+
+  - name: stg_teams_snapshot
+    description: >
+      Este snapshot captura el estado histórico de los equipos, basado en la tabla
+      `stg_teams`. Permite realizar análisis temporal sobre los equipos, incluyendo
+      datos relacionados a sus atributos actuales y cambios previos.
+    config:
+      unique_key: TEAM_ID
+      strategy: check
+      check_cols: ['*']
+    columns:
+      - name: TEAM_ID
+        description: Identificador único del equipo.
+        tests:
+          - unique
+          - not_null
+      - name: dbt_valid_from
+        description: Fecha en que el registro comenzó a ser válido.
+      - name: dbt_valid_to
+        description: Fecha en que el registro dejó de ser válido. Nulo si el registro sigue siendo válido.
